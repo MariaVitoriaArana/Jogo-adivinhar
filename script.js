@@ -1,50 +1,31 @@
-console.log("Bem-vindo ao jogo de Adivinhação!");
-
-
-let numeroSecreto = Math.floor(Math.random() * 99) + 1;
-let totalDeTentativas = 0;
+let numeroSecreto = Math.floor(Math.random() * 100) + 1;
 let pontos = 1000;
 
-console.log("Qual o nível de dificuldade?");
-console.log("(1) Fácil (2) Médio (3) Difícil");
+function jogar() {
+    let input = document.getElementById("chute");
+    let mensagem = document.getElementById("mensagem");
 
-let nivel = parseInt(prompt("Defina o nível: "));
+    let chute = parseInt(input.value);
 
-if (nivel === 1) {
-    totalDeTentativas = 20;
-} else if (nivel === 2) {
-    totalDeTentativas = 10;
-} else {
-    totalDeTentativas = 5;
-}
-
-for (let rodada = 1; rodada <= totalDeTentativas; rodada++) {
-    console.log(`Tentativa ${rodada} de ${totalDeTentativas}`);
-    let chuteStr = prompt("Digite um número entre 1 e 100: ");
-    console.log("Você digitou: ", chuteStr);
-    let chute = parseInt(chuteStr);
-
-    if (chute < 1 || chute > 100) {
-        console.log("Você deve digitar um número entre 1 e 100!");
-        continue;
+    if (!chute || chute < 1 || chute > 100) {
+        mensagem.innerHTML = "Digite um número válido entre 1 e 100!";
+        return;
     }
 
-    let acertou = numeroSecreto === chute;
-    let maior = chute > numeroSecreto;
-    let menor = chute < numeroSecreto;
+    if (chute === numeroSecreto) {
+        mensagem.innerHTML = `🎉 Você acertou! Pontos: ${pontos}`;
+        mensagem.style.color = "#d4af37";
+        return;
+    }
 
-    if (acertou) {
-        console.log(`Você acertou e fez ${pontos} pontos!`);
-        break;
+    if (chute > numeroSecreto) {
+        mensagem.innerHTML = "📉 O número secreto é MENOR!";
     } else {
-        if (maior) {
-            console.log("Você errou! O seu chute foi maior que o número secreto.");
-        } else if (menor) {
-            console.log("Você errou! O seu chute foi menor que o número secreto.");
-        }
-        let pontosPerdidos = Math.abs(numeroSecreto - chute);
-        pontos -= pontosPerdidos;
+        mensagem.innerHTML = "📈 O número secreto é MAIOR!";
     }
-}
 
-console.log("Fim do jogo");
+    let perda = Math.abs(numeroSecreto - chute);
+    pontos -= perda;
+
+    mensagem.style.color = "#f5f1e6";
+}
